@@ -78,6 +78,14 @@ export function segsOverlap(seg, otherSegs) {
 
 
 export function sortEvents(evtA, evtB, { startAccessor, endAccessor, allDayAccessor }) {
+  if (evtA.is_manually_ordered && evtB.is_manually_ordered) {
+      return evtA.ordering - evtB.ordering;
+  } else if (evtA.is_manually_ordered && !evtB.is_manually_ordered) {
+      return 0;
+  } else if (!evtA.is_manually_ordered && evtB.is_manually_ordered) {
+      return 1;
+  }
+  
   let startSort = +dates.startOf(get(evtA, startAccessor), 'day') - +dates.startOf(get(evtB, startAccessor), 'day')
 
   let durA = dates.diff(
